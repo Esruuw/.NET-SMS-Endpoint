@@ -1,13 +1,33 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace StudentApi.Models
 {
     public class Student
     {
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public string? Email { get; set; }
-        public string? Department { get; set; }
+        public int StudentId { get; set; }
+
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+
+        public string Gender { get; set; } = string.Empty;
+
+        public DateTime DateOfBirth { get; set; }
+
+        public string? Address { get; set; }
         public string? Phone { get; set; }
+
+        // Foreign Key
+        public int ClassId { get; set; }
+        public Class? Class { get; set; }
+
+        // Simple parent info (you can normalize later)
+        public string? ParentName { get; set; }
+        public string? ParentPhone { get; set; }
+
+        public DateTime AdmissionDate { get; set; } = DateTime.Now;
+
+        public string Status { get; set; } = "Active";
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime? UpdatedAt { get; set; }
     }
 }
+

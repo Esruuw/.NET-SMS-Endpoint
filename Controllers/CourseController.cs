@@ -1,0 +1,58 @@
+using Microsoft.AspNetCore.Mvc;
+using StudentApi.DTOs.Courses;
+
+[ApiController]
+[Route("api/[controller]")]
+public class CourseController : ControllerBase
+{
+    private readonly ICourseService _courseService;
+
+    public CourseController(ICourseService courseService)
+    {
+        _courseService = courseService;
+    }
+
+    // GET: api/course
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var courses = await _courseService.GetAllAsync();
+        return Ok(courses);
+    }
+
+    // GET: api/course/5
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var course = await _courseService.GetByIdAsync(id);
+
+        if (course == null)
+            return NotFound("Course not found");
+
+        return Ok(course);
+    }
+
+    // POST: api/course
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateCourseDto dto)
+    {
+        await _courseService.CreateAsync(dto);
+        return Ok("Course created successfully");
+    }
+
+    // PUT: api/course/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, UpdateCourseDto dto)
+    {
+        await _courseService.UpdateAsync(id, dto);
+        return Ok("Course updated successfully");
+    }
+
+    // DELETE: api/course/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _courseService.DeleteAsync(id);
+        return Ok("Course deleted successfully");
+    }
+}

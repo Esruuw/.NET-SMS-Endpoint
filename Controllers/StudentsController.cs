@@ -1,75 +1,58 @@
 using Microsoft.AspNetCore.Mvc;
-using StudentApi.Models;
-using StudentApi.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using StudentApi.Service;
 
-namespace StudentApi.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class StudentController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class StudentsController : ControllerBase
+    private readonly IStudentService _studentService;
+
+    public StudentController(IStudentService studentService)
     {
-        private readonly IStudentService _service;
+        _studentService = studentService;
+    }
 
-        public StudentsController(IStudentService service)
-        {
-            _service = service;
-        }
+    // GET: api/student
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var students = await _studentService.GetAllAsync();
+        return Ok(students);
+    }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Student>>> GetAll()
-        {
-            var students = await _service.GetAllStudents();
-            return Ok(students);
-        }
+    // GET: api/student/5
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var student = await _studentService.GetByIdAsync(id);
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Student>> GetById(int id)
-        {
-            var student = await _service.GetStudentById(id);
-            if (student == null) return NotFound();
-            return Ok(student);
-        }
+        if (student == null)
+            return NotFound("Student not found");
 
-        [HttpPost]
-        public async Task<ActionResult<Student>> Add(Student student)
-        {
-            await _service.AddStudent(student);
-            return CreatedAtAction(nameof(GetById), new { id = student.Id }, student);
-        }
+        return Ok(student);
+    }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Student updatedStudent)
-        {
-            var existing = await _service.GetStudentById(id);
-            if (existing == null) return NotFound();
+    // POST: api/student
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateStudentDto dto)
+    {
+        await _studentService.CreateAsync(dto);
+        return Ok("Student created successfully");
+    }
 
-            existing.Name = updatedStudent.Name;
-            existing.Email = updatedStudent.Email;
-            existing.Department = updatedStudent.Department;
-            existing.Phone = updatedStudent.Phone;
+    // PUT: api/student/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, UpdateStudentDto dto)
+    {
+        await _studentService.UpdateAsync(id, dto);
+        return Ok("Student updated successfully");
+    }
 
-            await _service.UpdateStudent(existing);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var existing = await _service.GetStudentById(id);
-            if (existing == null) return NotFound();
-
-            await _service.DeleteStudent(id);
-            return NoContent();
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<List<Student>>> Search([FromQuery] int? id, [FromQuery] string? name,
-                                                              [FromQuery] string? department, [FromQuery] string? phone)
-        {
-            var students = await _service.SearchStudent(id, name, department, phone);
-            return Ok(students);
-        }
+    // DELETE: api/student/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _studentService.DeleteAsync(id);
+        return Ok("Student deleted successfully");
     }
 }
