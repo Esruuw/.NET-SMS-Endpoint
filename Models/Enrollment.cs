@@ -1,16 +1,22 @@
 using StudentApi.Models;
 
-public class Enrollment
+namespace StudentApi.Models
 {
-    public int EnrollmentId { get; set; }
+    public class Enrollment
+    {
+        public int EnrollmentId { get; set; }
 
-    public int StudentId { get; set; }
-    public Student? Student { get; set; }
+        public int StudentId { get; set; }
+        public Student? Student { get; set; }
 
-    public int CourseId { get; set; }
-    public Course? Course { get; set; }
+        public int CourseId { get; set; }
+        public Course? Course { get; set; }
 
-    public DateTime EnrolledAt { get; set; } = DateTime.Now;
+        public DateTime EnrolledAt { get; set; } = DateTime.Now;
 
-    public string Status { get; set; } = "Active";
+        public string Status { get; set; } = "Active";
+
+        public Grade? Grade { get; set; }
+    }
 }
+

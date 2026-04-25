@@ -23,10 +23,11 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 builder.Services.AddScoped<ITeachingAssignmentRepository, TeachingAssignmentRepository>();
+builder.Services.AddScoped<IResultRepository, ResultRepository>();
+// builder.Services.AddScoped<IAuthRepository, AuthService>();
 
 
 // Services
@@ -34,12 +35,11 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IClassService, ClassService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+// builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddScoped<ITeachingAssignmentService, TeachingAssignmentService>();
-
-
+builder.Services.AddScoped<IResultService, ResultService>();
 
 //For Authentication
 builder.Services.AddAuthentication("Bearer")

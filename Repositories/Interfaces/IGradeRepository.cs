@@ -1,6 +1,12 @@
-public interface IGradeRepository
+using StudentApi.Models;
+    using StudentApi.Data;
+namespace StudentApi.Repositories.Interfaces
 {
-    Task<Grade?> GetByIdAsync(int id);
-    Task<List<Grade>> GetAllAsync();
-    Task AddAsync(Grade grade);
+    public interface IGradeRepository
+    {
+        Task<Grade?> GetByIdAsync(int id);
+        Task<List<Grade>> GetAllAsync();
+        Task AddAsync(Grade grade);
+    }
 }
+

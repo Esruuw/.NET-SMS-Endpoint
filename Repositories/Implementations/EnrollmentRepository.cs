@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentApi.Data;
+using StudentApi.Models;
+using StudentApi.Repositories.Interfaces;
 
 
 public class EnrollmentRepository : IEnrollmentRepository
