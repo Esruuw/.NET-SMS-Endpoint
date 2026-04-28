@@ -1,6 +1,4 @@
-
-using StudentApi.Models;
-namespace StudentApi.Service
+namespace StudentApi.Services.Interfaces
 {
     public interface IStudentService
     {
@@ -10,7 +8,4 @@ namespace StudentApi.Service
         Task UpdateAsync(int id, UpdateStudentDto dto);
         Task DeleteAsync(int id);
     }
-
 }
-
-

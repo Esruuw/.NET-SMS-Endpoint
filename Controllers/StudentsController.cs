@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using StudentApi.Service;
+// using StudentApi.Service;
+using StudentApi.Services.Interfaces;
 
 [ApiController]
 [Route("api/[controller]")]

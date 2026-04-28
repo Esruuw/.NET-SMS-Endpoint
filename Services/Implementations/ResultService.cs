@@ -1,8 +1,7 @@
-using StudentApi.DTOs;
-using StudentApi.Models;
-using StudentApi.Service;
 using StudentApi.Repositories.Interfaces;
 using StudentApi.Services.Interfaces;
+using StudentApi.Models;
+
 public class ResultService : IResultService
 {
     private readonly IResultRepository _repository;
@@ -31,18 +30,24 @@ public class ResultService : IResultService
                 Score = e.Grade?.Score ?? 0
             }).ToList();
 
+            // ✅ Calculate Total Score
+            double totalScore = courses.Sum(c => c.Score);
+
+            // ✅ Calculate Average
             double average = courses.Any()
-                ? courses.Sum(c => c.Score) / courses.Count
+                ? totalScore / courses.Count
                 : 0;
 
             studentResults.Add(new StudentResultDto
             {
                 StudentId = student.StudentId,
                 StudentName = student.FirstName + " " + student.LastName,
-                AverageScore = average,
+                TotalScore = totalScore,                  //new
+                AverageScore = Math.Round(average, 2),    // optional rounding
                 Courses = courses
             });
         }
+
 
         // 🎯 Ranking
         var rankedStudents = studentResults
@@ -61,4 +66,37 @@ public class ResultService : IResultService
             Students = rankedStudents
         };
     }
+
+
+    public async Task<StudentReportDto> GetStudentReportAsync(int studentId)
+    {
+        var student = await _repository.GetStudentWithClassAsync(studentId);
+
+        if (student == null)
+            throw new Exception("Student not found");
+
+        // Get all students in the same class (for ranking)
+        var classResult = await GetClassResultAsync(student.ClassId);
+
+        var currentStudent = classResult.Students
+            .FirstOrDefault(s => s.StudentId == studentId);
+
+        if (currentStudent == null)
+            throw new Exception("Student result not found");
+
+        return new StudentReportDto
+        {
+            StudentId = student.StudentId,
+            StudentName = student.FirstName + " " + student.LastName,
+            ClassName = student.Class?.ClassName ?? "",
+
+            TotalScore = currentStudent.TotalScore,
+            AverageScore = currentStudent.AverageScore,
+            Rank = currentStudent.Rank,
+
+            Courses = currentStudent.Courses
+        };
+    }
+
 }
+

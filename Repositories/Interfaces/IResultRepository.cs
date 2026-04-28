@@ -6,5 +6,7 @@ namespace StudentApi.Repositories.Interfaces
     {
         Task<Class> GetClassWithStudentsAsync(int classId);
         Task<List<Enrollment>> GetEnrollmentsByStudentIdAsync(int studentId);
+        Task<Student?> GetStudentWithClassAsync(int studentId);
+
     }
 }

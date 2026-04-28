@@ -26,4 +26,12 @@ public class ResultRepository : IResultRepository
             .Where(e => e.StudentId == studentId)
             .ToListAsync();
     }
+
+    public async Task<Student?> GetStudentWithClassAsync(int studentId)
+    {
+        return await _context.Students
+            .Include(s => s.Class)
+            .FirstOrDefaultAsync(s => s.StudentId == studentId);
+    }
+
 }

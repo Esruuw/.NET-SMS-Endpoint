@@ -1,95 +1,97 @@
 using StudentApi.Models;
-using StudentApi.Service;
-
-public class StudentService : IStudentService
+using StudentApi.Services.Interfaces;
+namespace StudentApi.Services.Implementations
 {
-    private readonly IStudentRepository _studentRepository;
-
-    public StudentService(IStudentRepository studentRepository)
+    public class StudentService : IStudentService
     {
-        _studentRepository = studentRepository;
-    }
+        private readonly IStudentRepository _studentRepository;
 
-    public async Task<List<StudentDto>> GetAllAsync()
-    {
-        var students = await _studentRepository.GetAllAsync();
-
-        return students.Select(s => new StudentDto
+        public StudentService(IStudentRepository studentRepository)
         {
-            StudentId = s.StudentId,
-            FullName = s.FirstName + " " + s.LastName,
-            Gender = s.Gender,
-            DateOfBirth = s.DateOfBirth,
-            Address = s.Address,
-            Phone = s.Phone,
-            ClassId = s.ClassId,
-            ClassName = s.Class?.ClassName,
-            ParentName = s.ParentName,
-            ParentPhone = s.ParentPhone,
-            Status = s.Status
-        }).ToList();
-    }
+            _studentRepository = studentRepository;
+        }
 
-    public async Task<StudentDto?> GetByIdAsync(int id)
-    {
-        var s = await _studentRepository.GetByIdAsync(id);
-        if (s == null) return null;
-
-        return new StudentDto
+        public async Task<List<StudentDto>> GetAllAsync()
         {
-            StudentId = s.StudentId,
-            FullName = s.FirstName + " " + s.LastName,
-            Gender = s.Gender,
-            DateOfBirth = s.DateOfBirth,
-            Address = s.Address,
-            Phone = s.Phone,
-            ClassId = s.ClassId,
-            ClassName = s.Class?.ClassName,
-            ParentName = s.ParentName,
-            ParentPhone = s.ParentPhone,
-            Status = s.Status
-        };
-    }
+            var students = await _studentRepository.GetAllAsync();
 
-    public async Task CreateAsync(CreateStudentDto dto)
-    {
-        var student = new Student
+            return students.Select(s => new StudentDto
+            {
+                StudentId = s.StudentId,
+                FullName = s.FirstName + " " + s.LastName,
+                Gender = s.Gender,
+                DateOfBirth = s.DateOfBirth,
+                Address = s.Address,
+                Phone = s.Phone,
+                ClassId = s.ClassId,
+                ClassName = s.Class?.ClassName,
+                ParentName = s.ParentName,
+                ParentPhone = s.ParentPhone,
+                Status = s.Status
+            }).ToList();
+        }
+
+        public async Task<StudentDto?> GetByIdAsync(int id)
         {
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Gender = dto.Gender,
-            DateOfBirth = dto.DateOfBirth,
-            Address = dto.Address,
-            Phone = dto.Phone,
-            ClassId = dto.ClassId,
-            ParentName = dto.ParentName,
-            ParentPhone = dto.ParentPhone
-        };
+            var s = await _studentRepository.GetByIdAsync(id);
+            if (s == null) return null;
 
-        await _studentRepository.AddAsync(student);
-    }
+            return new StudentDto
+            {
+                StudentId = s.StudentId,
+                FullName = s.FirstName + " " + s.LastName,
+                Gender = s.Gender,
+                DateOfBirth = s.DateOfBirth,
+                Address = s.Address,
+                Phone = s.Phone,
+                ClassId = s.ClassId,
+                ClassName = s.Class?.ClassName,
+                ParentName = s.ParentName,
+                ParentPhone = s.ParentPhone,
+                Status = s.Status
+            };
+        }
 
-    public async Task UpdateAsync(int id, UpdateStudentDto dto)
-    {
-        var student = await _studentRepository.GetByIdAsync(id);
-        if (student == null) return;
+        public async Task CreateAsync(CreateStudentDto dto)
+        {
+            var student = new Student
+            {
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Gender = dto.Gender,
+                DateOfBirth = dto.DateOfBirth,
+                Address = dto.Address,
+                Phone = dto.Phone,
+                ClassId = dto.ClassId,
+                ParentName = dto.ParentName,
+                ParentPhone = dto.ParentPhone
+            };
 
-        student.FirstName = dto.FirstName;
-        student.LastName = dto.LastName;
-        student.Gender = dto.Gender;
-        student.DateOfBirth = dto.DateOfBirth;
-        student.Address = dto.Address;
-        student.Phone = dto.Phone;
-        student.ClassId = dto.ClassId;
-        student.ParentName = dto.ParentName;
-        student.ParentPhone = dto.ParentPhone;
-        student.Status = dto.Status;
+            await _studentRepository.AddAsync(student);
+        }
 
-        await _studentRepository.UpdateAsync(student);
-    }
+        public async Task UpdateAsync(int id, UpdateStudentDto dto)
+        {
+            var student = await _studentRepository.GetByIdAsync(id);
+            if (student == null) return;
 
-    public async Task DeleteAsync(int id)
-    {
-        await _studentRepository.DeleteAsync(id);
+            student.FirstName = dto.FirstName;
+            student.LastName = dto.LastName;
+            student.Gender = dto.Gender;
+            student.DateOfBirth = dto.DateOfBirth;
+            student.Address = dto.Address;
+            student.Phone = dto.Phone;
+            student.ClassId = dto.ClassId;
+            student.ParentName = dto.ParentName;
+            student.ParentPhone = dto.ParentPhone;
+            student.Status = dto.Status;
+
+            await _studentRepository.UpdateAsync(student);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            await _studentRepository.DeleteAsync(id);
+        }
     }
 }

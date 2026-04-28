@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using StudentApi.Service;
 [ApiController]
 [Route("api/results")]
 public class ResultController : ControllerBase
@@ -17,4 +16,12 @@ public class ResultController : ControllerBase
         var result = await _service.GetClassResultAsync(classId);
         return Ok(result);
     }
+
+    [HttpGet("student/{studentId}")]
+    public async Task<IActionResult> GetStudentReport(int studentId)
+    {
+        var result = await _service.GetStudentReportAsync(studentId);
+        return Ok(result);
+    }
+
 }
