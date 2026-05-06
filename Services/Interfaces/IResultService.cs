@@ -1,6 +1,8 @@
+
 public interface IResultService
 {
     Task<ClassResultDto> GetClassResultAsync(int classId);
     Task<StudentReportDto> GetStudentReportAsync(int studentId);
+    Task<ClassStatisticsDto> GetClassStatisticsAsync(int classId);
 }
 

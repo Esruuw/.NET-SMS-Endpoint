@@ -8,6 +8,7 @@ public class StudentReportDto
     public double TotalScore { get; set; }
     public double AverageScore { get; set; }
     public int Rank { get; set; }
-
+    public bool IsPassed { get; set; }
+    public string Status { get; set; } = "";
     public List<CourseResultDto> Courses { get; set; } = new();
 }
