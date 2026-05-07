@@ -6,6 +6,7 @@ using StudentApi.Services.Interfaces;
 
 namespace StudentApi.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase

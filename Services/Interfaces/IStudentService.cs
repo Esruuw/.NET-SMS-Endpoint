@@ -7,5 +7,10 @@ namespace StudentApi.Services.Interfaces
         Task CreateAsync(CreateStudentDto dto);
         Task UpdateAsync(int id, UpdateStudentDto dto);
         Task DeleteAsync(int id);
+         Task<List<StudentDto>> SearchAsync(
+        int? id,
+        string? name,
+        string? gender,
+        int? classId);
     }
 }

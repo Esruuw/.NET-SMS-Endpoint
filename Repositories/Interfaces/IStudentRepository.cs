@@ -9,4 +9,8 @@ public interface IStudentRepository
     Task AddAsync(Student student);
     Task UpdateAsync(Student student);
     Task DeleteAsync(int id);
-}
+    Task<List<Student>> SearchAsync(
+        int? id,
+        string? name,
+        string? gender,
+        int? classId);}

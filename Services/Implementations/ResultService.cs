@@ -60,20 +60,40 @@ public class ResultService : IResultService
         }
 
         // 🎯 Ranking
-        var rankedStudents = studentResults
-            .OrderByDescending(s => s.AverageScore)
-            .Select((s, index) =>
-            {
-                s.Rank = index + 1;
-                return s;
-            })
-            .ToList();
+        // var rankedStudents = studentResults
+        //     .OrderByDescending(s => s.AverageScore)
+        //     .Select((s, index) =>
+        //     {
+        //         s.Rank = index + 1;
+        //         return s;
+        //     })
+        //     .ToList();
+var rankedStudents = studentResults
+    .OrderByDescending(s => s.AverageScore)
+    .ToList();
 
+int rank = 0;
+double? previousScore = null;
+int position = 0;
+
+foreach (var student in rankedStudents)
+{
+    position++;
+
+    if (previousScore == null || student.AverageScore != previousScore)
+    {
+        rank = position;
+    }
+
+    student.Rank = rank;
+    previousScore = student.AverageScore;
+}
         return new ClassResultDto
         {
             ClassId = classEntity.ClassId,
             ClassName = classEntity.ClassName,
             AcademicYear = classEntity.AcademicYear,
+            // Semester = classEntity.Semester,
             Students = rankedStudents
         };
     }

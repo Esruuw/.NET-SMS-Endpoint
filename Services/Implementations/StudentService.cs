@@ -27,6 +27,7 @@ namespace StudentApi.Services.Implementations
                 ClassName = s.Class?.ClassName,
                 ParentName = s.ParentName,
                 ParentPhone = s.ParentPhone,
+                StudentCode = s.StudentCode,
                 Status = s.Status
             }).ToList();
         }
@@ -48,12 +49,20 @@ namespace StudentApi.Services.Implementations
                 ClassName = s.Class?.ClassName,
                 ParentName = s.ParentName,
                 ParentPhone = s.ParentPhone,
+                StudentCode = s.StudentCode,
                 Status = s.Status
             };
         }
 
+
         public async Task CreateAsync(CreateStudentDto dto)
         {
+            var students = await _studentRepository.GetAllAsync();
+
+      int nextNumber = students.Count + 1;
+
+       string studentCode =
+        $"STU-{DateTime.Now.Year}-{nextNumber:D4}";
             var student = new Student
             {
                 FirstName = dto.FirstName,
@@ -64,6 +73,7 @@ namespace StudentApi.Services.Implementations
                 Phone = dto.Phone,
                 ClassId = dto.ClassId,
                 ParentName = dto.ParentName,
+                StudentCode = studentCode,
                 ParentPhone = dto.ParentPhone
             };
 
@@ -93,5 +103,29 @@ namespace StudentApi.Services.Implementations
         {
             await _studentRepository.DeleteAsync(id);
         }
+    
+
+     public async Task<List<StudentDto>> SearchAsync(
+            int? id,
+            string? name,
+            string? gender,
+            int? classId)
+        {
+            var students = await _studentRepository.SearchAsync(
+                id,
+                name,
+                gender,
+                classId);
+
+            return students.Select(s => new StudentDto
+            {
+                StudentId = s.StudentId,
+                FullName = s.FirstName + " " + s.LastName,
+                Gender = s.Gender,
+                ClassId = s.ClassId,
+                ClassName = s.Class.ClassName
+            }).ToList();
+        }
     }
 }
+    

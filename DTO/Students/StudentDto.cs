@@ -17,4 +17,6 @@ public class StudentDto
     public string? ParentPhone { get; set; }
 
     public string Status { get; set; } = "Active";
+    public string StudentCode { get; set; } = string.Empty;
+
 }

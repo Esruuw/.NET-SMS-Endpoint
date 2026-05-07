@@ -4,8 +4,7 @@ using StudentApi.Repositories.Interfaces;
 using StudentApi.Repositories.Implementations;
 using StudentApi.Services.Interfaces;
 using StudentApi.Services.Implementations;
-// using StudentApi.Service;
-
+using QuestPDF.Infrastructure;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -13,70 +12,120 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DbContext
+
+// QUEST PDF LICENSE
+
+QuestPDF.Settings.License = LicenseType.Community;
+
+
+// DB CONTEXT
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Repositories
+// REPOSITORIES
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
+
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
+
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
-builder.Services.AddScoped<ITeachingAssignmentRepository, TeachingAssignmentRepository>();
+
+builder.Services.AddScoped<ITeachingAssignmentRepository,
+    TeachingAssignmentRepository>();
+
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
-// Services
+// SERVICES
 builder.Services.AddScoped<IStudentService, StudentService>();
+
 builder.Services.AddScoped<IClassService, ClassService>();
+
 builder.Services.AddScoped<ITeacherService, TeacherService>();
+
 builder.Services.AddScoped<ICourseService, CourseService>();
+
 builder.Services.AddScoped<IGradeService, GradeService>();
+
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
-builder.Services.AddScoped<ITeachingAssignmentService, TeachingAssignmentService>();
+
+builder.Services.AddScoped<ITeachingAssignmentService,
+    TeachingAssignmentService>();
+
 builder.Services.AddScoped<IResultService, ResultService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+// PDF SERVICE
+builder.Services.AddScoped<PdfService>();
 
-//For Authentication
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer", options =>
+// JWT AUTHENTICATION
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+        options.TokenValidationParameters =
+            new TokenValidationParameters
+            {
+                ValidateIssuer = true,
 
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
-            )
-        };
+                ValidateAudience = true,
+
+                ValidateLifetime = true,
+
+                ValidateIssuerSigningKey = true,
+
+                ValidIssuer =
+                    builder.Configuration["Jwt:Issuer"],
+
+                ValidAudience =
+                    builder.Configuration["Jwt:Audience"],
+
+                IssuerSigningKey =
+                    new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(
+                            builder.Configuration["Jwt:Key"]!
+                        ))
+            };
     });
 
-
+// AUTHORIZATION
 builder.Services.AddAuthorization();
 
+// CONTROLLERS
 builder.Services.AddControllers();
+
+// SWAGGER
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 
+// BUILD APP
 var app = builder.Build();
 
+// DEVELOPMENT
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+
     app.UseSwaggerUI();
 }
 
+// MIDDLEWARE
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+// MAP CONTROLLERS
 app.MapControllers();
+
+// RUN APP
 app.Run();

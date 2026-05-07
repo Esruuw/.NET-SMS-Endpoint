@@ -12,4 +12,6 @@ public class CreateStudentDto
 
     public string? ParentName { get; set; }
     public string? ParentPhone { get; set; }
+    //public string StudentCode { get; set; } = string.Empty;
+
 }

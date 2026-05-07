@@ -10,7 +10,7 @@ namespace StudentApi.Models
 
         public string? Section { get; set; } // A, B, C (optional)
         public string AcademicYear { get; set; } = string.Empty;
-
+        // public string Semester { get; set; } = string.Empty; // First, Second, etc.
         // Foreign Key (Main Teacher)
         public int? TeacherId { get; set; }
         public Teacher? Teacher { get; set; }

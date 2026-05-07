@@ -22,60 +22,6 @@ namespace StudentApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Enrollment", b =>
-                {
-                    b.Property<int>("EnrollmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnrollmentId"));
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EnrolledAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EnrollmentId");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Enrollments");
-                });
-
-            modelBuilder.Entity("Grade", b =>
-                {
-                    b.Property<int>("GradeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GradeId"));
-
-                    b.Property<int>("EnrollmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Remark")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
-
-                    b.HasKey("GradeId");
-
-                    b.HasIndex("EnrollmentId");
-
-                    b.ToTable("Grades");
-                });
-
             modelBuilder.Entity("StudentApi.Models.Class", b =>
                 {
                     b.Property<int>("ClassId")
@@ -143,6 +89,61 @@ namespace StudentApi.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("StudentApi.Models.Enrollment", b =>
+                {
+                    b.Property<int>("EnrollmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnrollmentId"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EnrolledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EnrollmentId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Enrollments");
+                });
+
+            modelBuilder.Entity("StudentApi.Models.Grade", b =>
+                {
+                    b.Property<int>("GradeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GradeId"));
+
+                    b.Property<int>("EnrollmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
+
+                    b.HasKey("GradeId");
+
+                    b.HasIndex("EnrollmentId")
+                        .IsUnique();
+
+                    b.ToTable("Grades");
+                });
+
             modelBuilder.Entity("StudentApi.Models.Student", b =>
                 {
                     b.Property<int>("StudentId")
@@ -188,6 +189,10 @@ namespace StudentApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -301,7 +306,16 @@ namespace StudentApi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Enrollment", b =>
+            modelBuilder.Entity("StudentApi.Models.Class", b =>
+                {
+                    b.HasOne("StudentApi.Models.Teacher", "Teacher")
+                        .WithMany("Classes")
+                        .HasForeignKey("TeacherId");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("StudentApi.Models.Enrollment", b =>
                 {
                     b.HasOne("StudentApi.Models.Course", "Course")
                         .WithMany()
@@ -320,24 +334,15 @@ namespace StudentApi.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("Grade", b =>
+            modelBuilder.Entity("StudentApi.Models.Grade", b =>
                 {
-                    b.HasOne("Enrollment", "Enrollment")
-                        .WithMany()
-                        .HasForeignKey("EnrollmentId")
+                    b.HasOne("StudentApi.Models.Enrollment", "Enrollment")
+                        .WithOne("Grade")
+                        .HasForeignKey("StudentApi.Models.Grade", "EnrollmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Enrollment");
-                });
-
-            modelBuilder.Entity("StudentApi.Models.Class", b =>
-                {
-                    b.HasOne("StudentApi.Models.Teacher", "Teacher")
-                        .WithMany("Classes")
-                        .HasForeignKey("TeacherId");
-
-                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("StudentApi.Models.Student", b =>
@@ -373,6 +378,11 @@ namespace StudentApi.Migrations
             modelBuilder.Entity("StudentApi.Models.Class", b =>
                 {
                     b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("StudentApi.Models.Enrollment", b =>
+                {
+                    b.Navigation("Grade");
                 });
 
             modelBuilder.Entity("StudentApi.Models.Teacher", b =>

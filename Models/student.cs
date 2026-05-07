@@ -13,6 +13,7 @@ namespace StudentApi.Models
 
         public string? Address { get; set; }
         public string? Phone { get; set; }
+        public string StudentCode { get; set; } = string.Empty;
 
         // Foreign Key
         public int ClassId { get; set; }
@@ -28,6 +29,7 @@ namespace StudentApi.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
+
     }
 }
 
