@@ -18,6 +18,7 @@ namespace StudentApi.Data
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<TeachingAssignment> TeachingAssignments { get; set; }
+        public DbSet<Timetable> Timetables { get; set; }
         // public DbSet<Result> Results { get; set; }
     }
 }

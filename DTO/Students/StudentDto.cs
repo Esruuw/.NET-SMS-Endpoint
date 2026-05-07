@@ -18,5 +18,5 @@ public class StudentDto
 
     public string Status { get; set; } = "Active";
     public string StudentCode { get; set; } = string.Empty;
-
+    //public DateTime AdmissionDate { get; set; }
 }

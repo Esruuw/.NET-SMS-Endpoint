@@ -23,7 +23,7 @@ namespace StudentApi.Models
         public string? ParentName { get; set; }
         public string? ParentPhone { get; set; }
 
-        public DateTime AdmissionDate { get; set; } = DateTime.Now;
+        //public DateTime AdmissionDate { get; set; } = DateTime.Now;
 
         public string Status { get; set; } = "Active";
 

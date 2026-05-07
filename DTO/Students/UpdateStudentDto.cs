@@ -9,9 +9,9 @@ public class UpdateStudentDto
     public string? Phone { get; set; }
 
     public int ClassId { get; set; }
-
     public string? ParentName { get; set; }
     public string? ParentPhone { get; set; }
 
     public string Status { get; set; } = "Active";
+    public DateTime AdmissionDate { get; set; }
 }

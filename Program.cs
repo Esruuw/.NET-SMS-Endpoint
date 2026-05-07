@@ -43,6 +43,10 @@ builder.Services.AddScoped<IResultRepository, ResultRepository>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+builder.Services.AddScoped<ITimetableRepository,TimetableRepository>();
+
+
+
 // SERVICES
 builder.Services.AddScoped<IStudentService, StudentService>();
 
@@ -62,6 +66,9 @@ builder.Services.AddScoped<ITeachingAssignmentService,
 builder.Services.AddScoped<IResultService, ResultService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITimetableService,TimetableService>();
+
+
 
 // PDF SERVICE
 builder.Services.AddScoped<PdfService>();
