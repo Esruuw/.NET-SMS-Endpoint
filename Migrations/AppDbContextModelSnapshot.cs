@@ -22,6 +22,91 @@ namespace StudentApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("StudentApi.Models.Assessment", b =>
+                {
+                    b.Property<int>("AssessmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AssessmentId"));
+
+                    b.Property<string>("AcademicYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Assignment")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Attendance")
+                        .HasColumnType("float");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("FinalExam")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MidExam")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Participation")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Semester")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalScore")
+                        .HasColumnType("float");
+
+                    b.HasKey("AssessmentId");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Assessments");
+                });
+
+            modelBuilder.Entity("StudentApi.Models.Attendance", b =>
+                {
+                    b.Property<int>("AttendanceId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceId"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TimetableId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendanceId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TimetableId");
+
+                    b.ToTable("Attendances");
+                });
+
             modelBuilder.Entity("StudentApi.Models.Class", b =>
                 {
                     b.Property<int>("ClassId")
@@ -350,6 +435,44 @@ namespace StudentApi.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("StudentApi.Models.Assessment", b =>
+                {
+                    b.HasOne("StudentApi.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentApi.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("StudentApi.Models.Attendance", b =>
+                {
+                    b.HasOne("StudentApi.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StudentApi.Models.Timetable", "Timetable")
+                        .WithMany("Attendances")
+                        .HasForeignKey("TimetableId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Timetable");
+                });
+
             modelBuilder.Entity("StudentApi.Models.Class", b =>
                 {
                     b.HasOne("StudentApi.Models.Teacher", "Teacher")
@@ -459,6 +582,11 @@ namespace StudentApi.Migrations
             modelBuilder.Entity("StudentApi.Models.Teacher", b =>
                 {
                     b.Navigation("Classes");
+                });
+
+            modelBuilder.Entity("StudentApi.Models.Timetable", b =>
+                {
+                    b.Navigation("Attendances");
                 });
 #pragma warning restore 612, 618
         }

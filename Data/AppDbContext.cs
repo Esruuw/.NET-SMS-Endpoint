@@ -19,6 +19,18 @@ namespace StudentApi.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<TeachingAssignment> TeachingAssignments { get; set; }
         public DbSet<Timetable> Timetables { get; set; }
-        // public DbSet<Result> Results { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<Assessment> Assessments { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Attendance>()
+                .HasOne(a => a.Timetable)
+                .WithMany(t => t.Attendances)
+                .HasForeignKey(a => a.TimetableId)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

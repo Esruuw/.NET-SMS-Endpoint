@@ -23,5 +23,8 @@ namespace StudentApi.Models
         public Course? Course { get; set; }
 
         public Teacher? Teacher { get; set; }
+
+        // Navigation property for related attendances
+        public ICollection<Attendance> Attendances { get; set; }= new List<Attendance>();
     }
 }

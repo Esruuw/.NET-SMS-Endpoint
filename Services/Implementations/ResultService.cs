@@ -22,14 +22,24 @@ public class ResultService : IResultService
 
         foreach (var student in classEntity.Students)
         {
-            var enrollments = await _repository.GetEnrollmentsByStudentIdAsync(student.StudentId);
+    var assessments =
+    await _repository
+        .GetAssessmentsByStudentIdAsync(
+            student.StudentId);
 
-            var courses = enrollments.Select(e => new CourseResultDto
-            {
-                CourseId = e.CourseId,
-                CourseName = e.Course.CourseName,
-                Score = e.Grade?.Score ?? 0
-            }).ToList();
+          var courses = assessments.Select(a =>
+    new CourseResultDto
+    {
+        CourseId = a.CourseId,
+
+        CourseName =
+            a.Course!.CourseName,
+
+        Score =
+            a.TotalScore
+    }).ToList();
+
+
 
             // ✅ Calculate Total Score
             double totalScore = courses.Sum(c => c.Score);

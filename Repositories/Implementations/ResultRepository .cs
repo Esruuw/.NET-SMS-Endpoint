@@ -34,4 +34,14 @@ public class ResultRepository : IResultRepository
             .FirstOrDefaultAsync(s => s.StudentId == studentId);
     }
 
+    public async Task<List<Assessment>> GetAssessmentsByStudentIdAsync(int studentId)
+    {
+        return await _context.Assessments
+            .Include(a => a.Course)
+            .Where(a => a.StudentId == studentId)
+            .ToListAsync();
+
+            
+    }
+
 }

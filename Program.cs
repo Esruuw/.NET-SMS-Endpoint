@@ -36,14 +36,15 @@ builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 
-builder.Services.AddScoped<ITeachingAssignmentRepository,
-    TeachingAssignmentRepository>();
+builder.Services.AddScoped<ITeachingAssignmentRepository,TeachingAssignmentRepository>();
 
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<ITimetableRepository,TimetableRepository>();
+builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
+builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
 
 
 
@@ -60,18 +61,24 @@ builder.Services.AddScoped<IGradeService, GradeService>();
 
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 
-builder.Services.AddScoped<ITeachingAssignmentService,
-    TeachingAssignmentService>();
+builder.Services.AddScoped<ITeachingAssignmentService,TeachingAssignmentService>();
 
 builder.Services.AddScoped<IResultService, ResultService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITimetableService,TimetableService>();
-
+builder.Services.AddScoped<IAttendanceService,AttendanceService>();
+builder.Services.AddScoped<IAssessmentService,AssessmentService>();
 
 
 // PDF SERVICE
 builder.Services.AddScoped<PdfService>();
+
+
+//EXCEL SERVICE
+builder.Services.AddScoped<IExcelService, ExcelService>();
+
+
 
 // JWT AUTHENTICATION
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
