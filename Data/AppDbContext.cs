@@ -21,8 +21,15 @@ namespace StudentApi.Data
         public DbSet<Timetable> Timetables { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Assessment> Assessments { get; set; }
+        public DbSet<Fee> Fees { get; set; }
+        public DbSet<Exam> Exams { get; set; }
+        public DbSet<PromotionHistory> PromotionHistories { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<FeePayment>
+        FeePayments
+        { get; set; }
+        protected override void OnModelCreating(
+        ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
@@ -30,6 +37,20 @@ namespace StudentApi.Data
                 .HasOne(a => a.Timetable)
                 .WithMany(t => t.Attendances)
                 .HasForeignKey(a => a.TimetableId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // FeePayment → Student
+            modelBuilder.Entity<FeePayment>()
+                .HasOne(fp => fp.Student)
+                .WithMany()
+                .HasForeignKey(fp => fp.StudentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // FeePayment → Fee
+            modelBuilder.Entity<FeePayment>()
+                .HasOne(fp => fp.Fee)
+                .WithMany(f => f.FeePayments)
+                .HasForeignKey(fp => fp.FeeId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

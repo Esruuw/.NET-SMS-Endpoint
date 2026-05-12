@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentApi.Data;
 
@@ -11,9 +12,11 @@ using StudentApi.Data;
 namespace StudentApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260512063155_ExamManagement")]
+    partial class ExamManagement
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,9 +215,6 @@ namespace StudentApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExamId"));
 
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CourseId")
                         .HasColumnType("int");
 
@@ -231,8 +231,6 @@ namespace StudentApi.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("ExamId");
-
-                    b.HasIndex("ClassId");
 
                     b.HasIndex("CourseId");
 
@@ -371,36 +369,6 @@ namespace StudentApi.Migrations
                         .IsUnique();
 
                     b.ToTable("Grades");
-                });
-
-            modelBuilder.Entity("StudentApi.Models.PromotionHistory", b =>
-                {
-                    b.Property<int>("PromotionHistoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PromotionHistoryId"));
-
-                    b.Property<int>("FromClassId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PerformedByUserId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PromotedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ToClassId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PromotionHistoryId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("PromotionHistories");
                 });
 
             modelBuilder.Entity("StudentApi.Models.Student", b =>
@@ -677,17 +645,11 @@ namespace StudentApi.Migrations
 
             modelBuilder.Entity("StudentApi.Models.Exam", b =>
                 {
-                    b.HasOne("StudentApi.Models.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId");
-
                     b.HasOne("StudentApi.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Class");
 
                     b.Navigation("Course");
                 });
@@ -731,17 +693,6 @@ namespace StudentApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Enrollment");
-                });
-
-            modelBuilder.Entity("StudentApi.Models.PromotionHistory", b =>
-                {
-                    b.HasOne("StudentApi.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("StudentApi.Models.Student", b =>

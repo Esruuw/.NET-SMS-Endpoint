@@ -36,16 +36,20 @@ builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 
 builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
 
-builder.Services.AddScoped<ITeachingAssignmentRepository,TeachingAssignmentRepository>();
+builder.Services.AddScoped<ITeachingAssignmentRepository, TeachingAssignmentRepository>();
 
 builder.Services.AddScoped<IResultRepository, ResultRepository>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<ITimetableRepository,TimetableRepository>();
-builder.Services.AddScoped<IAttendanceRepository,AttendanceRepository>();
-builder.Services.AddScoped<IAssessmentRepository,AssessmentRepository>();
-
+builder.Services.AddScoped<ITimetableRepository, TimetableRepository>();
+builder.Services.AddScoped<IAttendanceRepository, AttendanceRepository>();
+builder.Services.AddScoped<IAssessmentRepository, AssessmentRepository>();
+builder.Services.AddScoped<IFeeRepository, FeeRepository>();
+builder.Services.AddScoped<IFeePaymentRepository, FeePaymentRepository>();
+builder.Services.AddScoped<IExamRepository, ExamRepository>();
+builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddScoped<IPromotionService, PromotionService>();
 
 
 // SERVICES
@@ -61,14 +65,18 @@ builder.Services.AddScoped<IGradeService, GradeService>();
 
 builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 
-builder.Services.AddScoped<ITeachingAssignmentService,TeachingAssignmentService>();
+builder.Services.AddScoped<ITeachingAssignmentService, TeachingAssignmentService>();
 
 builder.Services.AddScoped<IResultService, ResultService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITimetableService,TimetableService>();
-builder.Services.AddScoped<IAttendanceService,AttendanceService>();
-builder.Services.AddScoped<IAssessmentService,AssessmentService>();
+builder.Services.AddScoped<ITimetableService, TimetableService>();
+builder.Services.AddScoped<IAttendanceService, AttendanceService>();
+builder.Services.AddScoped<IAssessmentService, AssessmentService>();
+builder.Services.AddScoped<IFeeService, FeeService>();
+builder.Services.AddScoped<IFeePaymentService, FeePaymentService>();
+builder.Services.AddScoped<IExamService, ExamService>();
+
 
 
 // PDF SERVICE
