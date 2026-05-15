@@ -5,7 +5,7 @@ using StudentApi.Repositories.Interfaces;
 
 namespace StudentApi.Repositories.Implementations
 {
-    public class FeePaymentRepository: IFeePaymentRepository
+    public class FeePaymentRepository : IFeePaymentRepository
     {
         private readonly AppDbContext _context;
 
@@ -61,6 +61,27 @@ namespace StudentApi.Repositories.Implementations
             await _context.FeePayments
                 .AddAsync(payment);
 
+            // create history snapshot
+            var history = new FeeHistory
+            {
+                FeePaymentId = payment.FeePaymentId,
+                StudentId = payment.StudentId,
+                FeeId = payment.FeeId,
+                AmountPaid = payment.AmountPaid,
+                PaymentDate = payment.PaymentDate,
+                PaymentMethod = payment.PaymentMethod,
+                TransactionId = payment.TransactionId,
+                ReceiptNumber = payment.ReceiptNumber,
+                Status = payment.Status,
+                Remarks = payment.Remarks,
+                CreatedAt = DateTime.Now
+            };
+
+            await _context.SaveChangesAsync();
+
+            // ensure FeePaymentId is set (after SaveChanges)
+            history.FeePaymentId = payment.FeePaymentId;
+            await _context.FeeHistories.AddAsync(history);
             await _context.SaveChangesAsync();
         }
 

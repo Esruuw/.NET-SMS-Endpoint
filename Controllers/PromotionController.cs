@@ -34,5 +34,12 @@ namespace StudentApi.Controllers
             await _promotionService.PromoteStudentAsync(studentId, targetClassId, targetAcademicYear, performedByUserId);
             return Ok("Student promoted successfully");
         }
+
+        [HttpPost("eligible")]
+        public async Task<IActionResult> GetEligible([FromBody] PromotionQueryDto dto)
+        {
+            var list = await _promotionService.GetEligibleStudentsAsync(dto);
+            return Ok(list);
+        }
     }
 }

@@ -11,12 +11,14 @@ namespace StudentApi.Services.Implementations
         private readonly IClassRepository _classRepo;
         private readonly IStudentRepository _studentRepo;
         private readonly AppDbContext _db;
+        private readonly IResultService _resultService;
 
-        public PromotionService(IClassRepository classRepo, IStudentRepository studentRepo, AppDbContext db)
+        public PromotionService(IClassRepository classRepo, IStudentRepository studentRepo, AppDbContext db, IResultService resultService)
         {
             _classRepo = classRepo;
             _studentRepo = studentRepo;
             _db = db;
+            _resultService = resultService;
         }
 
         public async Task PromoteClassAsync(int classId, string? targetAcademicYear = null, int? performedByUserId = null)
@@ -158,6 +160,29 @@ namespace StudentApi.Services.Implementations
                 await tx.RollbackAsync();
                 throw;
             }
+        }
+
+        public async Task<List<EligibleStudentDto>> GetEligibleStudentsAsync(PromotionQueryDto dto)
+        {
+            var fromClassId = dto.FromClassId;
+            var minAvg = dto.MinimumAverage ?? 0.0;
+
+            // Reuse existing ResultService logic to compute class results (averages per student)
+            var classResult = await _resultService.GetClassResultAsync(fromClassId);
+
+            var eligible = classResult.Students
+                .Where(s => s.AverageScore >= minAvg)
+                .Select(s => new EligibleStudentDto
+                {
+                    StudentId = s.StudentId,
+                    StudentName = s.StudentName,
+                    AverageScore = s.AverageScore,
+                    FromClassId = fromClassId,
+                    ToClassId = dto.ToClassId
+                })
+                .ToList();
+
+            return eligible;
         }
     }
 }

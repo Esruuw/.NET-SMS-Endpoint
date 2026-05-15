@@ -24,6 +24,7 @@ namespace StudentApi.Data
         public DbSet<Fee> Fees { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<PromotionHistory> PromotionHistories { get; set; }
+        public DbSet<FeeHistory> FeeHistories { get; set; }
 
         public DbSet<FeePayment>
         FeePayments
